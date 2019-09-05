@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-//import axios from 'axios';
-//import logo from './logo.svg';
 import './App.css';
 import {MainPage} from './MainPage.js';
 import {ArticlePage} from './ArticlePage.js';
 import {AuthorsPage} from './AuthorsPage.js';
 import {BrowserRouter as Router} from 'react-router-dom';
 import {Route} from 'react-router-dom';
+//import MDReactComponent from 'markdown-react-js';
+//<MDReactComponent text='Some text **with emphasis**.' />
 
 function App() {
   return (

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {COCKPIT_ROOT} from './MainPage.js';
+import MDReactComponent from 'markdown-react-js';
 
 function ArticlePage(props) {
   let [article, updateArticle] = useState({});
@@ -27,18 +28,9 @@ function ArticlePage(props) {
       <h2>{article.title}</h2>
       { article.author ? <p>{article.author[0].display}</p> : null}
       <p>{article.published_on}</p>
-      <p>{article.body}</p>
+      { article.body ? <MDReactComponent text={article.body} /> : null}
     </div>
   );
-
-  // return(
-  //   <div>
-  //     <h2>{article.title}</h2>
-  //     <p>{article.author[0].display}</p>
-  //     <p>{article.date}</p>
-  //     <p></p>
-  //   </div>
-  // );
 }
 
 export { ArticlePage };

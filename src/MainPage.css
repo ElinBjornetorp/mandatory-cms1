@@ -1,0 +1,9 @@
+
+.authorsLink {
+  margin-top: 30px;
+}
+
+.pagination {
+  display: flex;
+  flex-direction: row;
+}

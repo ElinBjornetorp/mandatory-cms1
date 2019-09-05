@@ -1,25 +1,41 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
+import './MainPage.css';
 
 const COCKPIT_ROOT = "http://192.168.99.100:8080";
 
 function MainPage() {
   let [articles, updateArticles] = useState([]);
+  let [pageNr, updatePageNr] = useState(1);
+  let articlesPerPage = 5;
+  let limit = 0;
 
-  //useEffect kommer bara köras första gången
-  useEffect(function() {
-    axios.post(`${COCKPIT_ROOT}/api/collections/get/articles`, {
+  //Funktion som hämtar ett urval av artiklar
+  function getArticles(articlesPerPage, pageNr) {
+    axios.post(`${COCKPIT_ROOT}/api/collections/get/articles?sort[published_on]=-1`, {
       fields: {title: 1, author: 1, published_on: 1},
+      skip: articlesPerPage * (pageNr-1),
+      limit: articlesPerPage,
     })
     .then(function (response) {
-      let articles = response.data.entries; //Ändra!! Är samma namn som state.
-      console.log(articles);
-      updateArticles(articles);
+      let articleData = response.data.entries;
+      updateArticles(articleData);
     })
     .catch(function (error) {
       console.log(error);
     });
+  }
+
+  function onClickGoToNextPage(event) {
+    updatePageNr(pageNr+1);
+    getArticles(articlesPerPage, 2); //Fixa att pageNr uppdateras!
+
+  }
+
+  //useEffect kommer bara köras första gången
+  useEffect(function() {
+    getArticles(5, 1);
   }, []);
 
   let tableRows = articles.map(article => {
@@ -35,11 +51,18 @@ function MainPage() {
   });
 
   return(
-    <table>
-      <tbody>
-        {tableRows}
-      </tbody>
-    </table>
+    <>
+      <table>
+        <tbody>
+          {tableRows}
+        </tbody>
+      </table>
+      <div className="pagination">
+        <button>Tillbaka</button>
+        <button onClick={onClickGoToNextPage}>Nästa</button>
+      </div>
+      <Link className="authorsLink" to="/authors">Om våra bloggare</Link>
+    </>
   );
 }
 
