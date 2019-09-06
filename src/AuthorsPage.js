@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {COCKPIT_ROOT} from './MainPage.js';
+import './AuthorsPage.css';
 
 function AuthorsPage() {
   let [authors, updateAuthors] = useState([]);
@@ -21,7 +22,7 @@ function AuthorsPage() {
   let authorDivs = authors.map(author => {
     return(
       <div>
-        {author.avatar ? <img src={author.avatar.path} alt="Bild"/> : null} {author.avatar.path}
+          {author.avatar ? <img className="avatar" src={"http://192.168.99.100:8080/" + author.avatar.path} alt="Bild"/> : null}
         <h3>{author.name}</h3>
         <p>{author.description}</p>
       </div>

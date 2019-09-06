@@ -9,7 +9,6 @@ function MainPage() {
   let [articles, updateArticles] = useState([]);
   let [pageNr, updatePageNr] = useState(1);
   let articlesPerPage = 5;
-  let limit = 0;
 
   //Funktion som hämtar ett urval av artiklar
   function getArticles(articlesPerPage, pageNr) {
@@ -27,16 +26,19 @@ function MainPage() {
     });
   }
 
-  function onClickGoToNextPage(event) {
-    updatePageNr(pageNr+1);
-    getArticles(articlesPerPage, 2); //Fixa att pageNr uppdateras!
+  //Varje gång pageNr uppdateras görs ett nytt anrop
+  useEffect(function() {
+    getArticles(articlesPerPage, pageNr);
+  }, [pageNr]);
 
+  function onClickGoForward(event) {
+    updatePageNr(pageNr+1);
   }
 
-  //useEffect kommer bara köras första gången
-  useEffect(function() {
-    getArticles(5, 1);
-  }, []);
+  function onClickGoBack(event) {
+    if(pageNr < 2) return;
+    updatePageNr(pageNr-1);
+  }
 
   let tableRows = articles.map(article => {
     return(
@@ -58,8 +60,8 @@ function MainPage() {
         </tbody>
       </table>
       <div className="pagination">
-        <button>Tillbaka</button>
-        <button onClick={onClickGoToNextPage}>Nästa</button>
+        { pageNr === 1 ? <button disabled>Tillbaka</button> : <button onClick={onClickGoBack}>Tillbaka</button> }
+        <button onClick={onClickGoForward}>Nästa</button>
       </div>
       <Link className="authorsLink" to="/authors">Om våra bloggare</Link>
     </>
